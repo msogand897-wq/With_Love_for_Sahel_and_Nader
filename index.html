@@ -1,32 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <title>با عشق برای ساحل و نادر</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>اولین آهنگ</title>
   <style>
-    body { background:#fff0f5; font-family: sans-serif; margin:0; padding:24px; text-align:center; direction:rtl; }
-    .card { max-width: 720px; margin: 0 auto; background:#ffffff; border-radius:16px; padding:24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-    img { width:100%; max-width:420px; border-radius:12px; margin:16px auto; display:block; }
-    h1 { margin:8px 0 12px; font-size:24px; }
-    p { line-height:1.8; margin:0 auto 12px; max-width:520px; font-size:18px; }
-    audio { margin-top:16px; width:100%; max-width:420px; }
-    .note { font-size: 12px; color:#666; margin-top: 8px; }
+    body {
+      margin: 0;
+      font-family: "Tahoma", sans-serif;
+      background: linear-gradient(180deg, #0f1724, #1a2235);
+      color: #fff;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 28px;
+      color: #ff6b6b;
+    }
+    .play-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .big-play {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(180deg,#ff7b7b,#ff4b4b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(255,75,75,0.4);
+    }
+    .big-play svg {
+      width: 60px;
+      height: 60px;
+      fill: #fff;
+      transform: translateX(5px);
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>سالگرد نامزدیتون مبارک ❤️🫂</h1>
-    <p>عزیزای دلم، شما کنار هم خیلی می‌درخشین ✨ یه دنیا عشق و شادی براتون آرزو می‌کنم</p>
-
-    <img src="IMAGE_LINK_HERE" alt="تصویر جشن">
-
-    <audio controls>
-      <source src="MUSIC_LINK_HERE" type="audio/mpeg">
-      مرورگر شما از پخش موزیک پشتیبانی نمی‌کند.
-    </audio>
-
-    <div class="note">با اسکن QR همیشه می‌تونین این صفحه رو دوباره ببینین.</div>
+  <div class="container">
+    <img src="assets/InShot_۲۰۲۵۱۱۳۰_۲۳۳۷۲۴۴۶۹.jpg" alt="عکس ویژه" />
+    <h1>چون اولین آهنگتون بود 🥲❤️ 
+    <p>عزیزای دلم، شما کنار هم خیلی می‌درخشین ✨ یه دنیا عشق و شادی براتون آرزو می‌کنم
   </div>
+
+  <!-- پخش آهنگ -->
+  <audio id="bgAudio" preload="auto" loop>
+    <source src="assets/Mohsen Chavoshi - Gheire Mamoli 128 (UpMusic).mp3" type="audio/mpeg">
+    مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+  </audio>
+
+  <!-- دکمه بزرگ پخش در صورت بلاک شدن autoplay -->
+  <div id="playOverlay" class="play-overlay">
+    <div class="big-play" id="bigPlayBtn">
+      <svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg>
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('bgAudio');
+    const playOverlay = document.getElementById('playOverlay');
+    const bigPlayBtn = document.getElementById('bigPlayBtn');
+
+    // تلاش برای پخش خودکار
+    window.addEventListener('load', () => {
+      audio.play().then(() => {
+        playOverlay.style.display = 'none';
+      }).catch(() => {
+        playOverlay.style.display = 'flex';
+      });
+    });
+
+    // اگر autoplay بلاک شد، با کلیک کاربر پخش کن
+    bigPlayBtn.addEventListener('click', () => {
+      audio.play();
+      playOverlay.style.display = 'none';
+    });
+  </script>
 </body>
 </html>

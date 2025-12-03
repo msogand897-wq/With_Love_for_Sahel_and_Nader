@@ -1,115 +1,222 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>هدیه سالگرد نامزدی</title>
-  <style>
-    :root{ --accent:#ff6b6b; --text:#ffffff; }
-    html,body{ height:100%; margin:0; font-family:"Segoe UI", Tahoma, Arial, sans-serif; background:linear-gradient(180deg,#0f1724 0%,#071021 100%); color:var(--text); }
-    .hero{ position:relative; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px; }
-    .bg-image{ position:absolute; inset:0; background-image:url("Sahel.jpg"); background-size:cover; background-position:center; filter:blur(8px) brightness(0.45); transform:scale(1.06); transition:filter .8s ease, transform 8s ease; z-index:0; }
-    .hero:hover .bg-image{ filter:blur(4px) brightness(0.6); transform:scale(1.08); }
-    .content{ position:relative; z-index:3; max-width:1000px; width:100%; padding:28px; background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border-radius:16px; box-shadow:0 10px 40px rgba(2,6,23,0.6); backdrop-filter:blur(6px) saturate(120%); border:1px solid rgba(255,255,255,0.04); display:flex; flex-direction:column; align-items:center; gap:18px; }
-    .photo-frame{ width:min(720px,86%); max-height:60vh; border-radius:12px; overflow:visible; box-shadow:0 12px 40px rgba(0,0,0,0.6); background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02)); padding:8px; display:flex; align-items:center; justify-content:center; }
-    .photo-frame img{ width:100%; height:auto; max-height:56vh; object-fit:contain; display:block; border-radius:8px; transition:transform .6s ease, filter .6s ease; filter:saturate(1.05) contrast(1.02); }
-    .photo-frame img:hover{ transform:scale(1.02); }
-    h1{ margin:6px 0 0; font-size:28px; letter-spacing:0.6px; }
-    p.lead{ margin:0; color:rgba(255,255,255,0.9); font-size:16px; }
-    .play-btn{ display:inline-flex; align-items:center; gap:10px; background:linear-gradient(90deg,var(--accent), #ff8a8a); color:#111; padding:12px 20px; border-radius:999px; font-weight:700; cursor:pointer; border:none; box-shadow:0 8px 30px rgba(255,107,107,0.18); transition:transform .18s ease; }
-    .play-btn:active{ transform:translateY(2px); }
-    #particles{ position:absolute; inset:0; z-index:1; pointer-events:none; }
-    footer{ position:fixed; left:0; right:0; bottom:12px; z-index:5; text-align:center; color:rgba(255,255,255,0.85); font-size:14px; user-select:none; }
-    @media (max-width:900px){ .photo-frame{ width:92%; max-height:50vh; } .photo-frame img{ max-height:46vh; } }
-    @media (max-width:520px){ .content{ padding:18px; border-radius:12px; } h1{ font-size:20px; } }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>هدیه</title>
+  <style>
+    :root{
+      --bg:#071021;
+      --accent:#ff6b6b;
+      --text:#ffffff;
+    }
+
+    /* موبایل-اول: صفحه تمام صفحه، بدون حاشیه */
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--bg);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:var(--text);
+      -webkit-touch-callout:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+
+    /* کانتینر کلی */
+    .wrap{
+      position:relative;
+      height:100vh;
+      width:100%;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg, rgba(7,16,33,1) 0%, rgba(4,8,18,1) 100%);
+    }
+
+    /* قاب تصویر: اندازه دقیق برای موبایل (تصویر هرگز از ارتفاع صفحه بزرگتر نمی‌شود) */
+    .photo-area{
+      width:100%;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    /* تصویر اصلی: نمایش کامل (بدون برش)، حداکثر ارتفاع برابر با ارتفاع ویوپورت */
+    .photo-area img{
+      max-height:100vh;    /* هرگز از ارتفاع صفحه بزرگتر نشود */
+      width:auto;          /* نسبت تصویر حفظ شود */
+      max-width:100%;      /* در عرض موبایل از صفحه بیرون نزند */
+      object-fit:contain;  /* نمایش کامل تصویر بدون برش */
+      display:block;
+      border-radius:6px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      -webkit-user-drag: none;
+    }
+
+    /* متن کوتاه روی تصویر (شفاف و خوانا) */
+    .overlay-text{
+      position:absolute;
+      left:12px;
+      right:12px;
+      bottom:84px; /* بالای فوتر و کنترل‌ها */
+      text-align:center;
+      font-weight:700;
+      font-size:18px;
+      color:var(--text);
+      background: linear-gradient(90deg, rgba(0,0,0,0.28), rgba(255,255,255,0.02));
+      padding:10px 14px;
+      border-radius:10px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+      line-height:1.2;
+    }
+
+    /* کنترل پخش کوچک و مینیمال */
+    .controls{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      z-index:40;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .btn{
+      width:56px;
+      height:56px;
+      border-radius:999px;
+      border:0;
+      background:linear-gradient(180deg,var(--accent), #ff8a8a);
+      color:#111;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 8px 30px rgba(255,107,107,0.18);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* فوتر متن دقیق */
+    footer{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:86px;
+      z-index:30;
+      text-align:center;
+      color:rgba(255,255,255,0.9);
+      font-size:13px;
+      pointer-events:none;
+    }
+
+    /* واکنشگرایی برای موبایل‌های خیلی کوچک */
+    @media (max-width:360px){
+      .overlay-text{ font-size:16px; bottom:78px; padding:8px 10px; }
+      .btn{ width:50px; height:50px; }
+    }
+  </style>
 </head>
 <body>
-  <div class="hero">
-    <div class="bg-image" aria-hidden="true"></div>
-    <canvas id="particles"></canvas>
+  <div class="wrap">
+    <div class="photo-area" id="photoArea">
+      <img src="Sahel.jpg" alt="عکس" id="mainImage" draggable="false" />
+    </div>
 
-    <div class="content" role="main" aria-label="هدیه سالگرد نامزدی">
-      <div class="photo-frame" aria-hidden="false">
-        <img src="Sahel.jpg" alt="عکس نامزدی دو نفره" />
-      </div>
+    <div class="overlay-text" id="message">از طرف کسی که همیشه کنارتونه</div>
 
+    <footer id="footerText">چونکه اولین اهنگتون بود</footer>
 
-   
-      <p class="lead">از طرفِ یکی که همیشه کنارتونه  </p>
+    <div class="controls" id="controls">
+      <button id="playBtn" class="btn" aria-label="پخش یا توقف">▶</button>
+    </div>
 
-      <div id="controls">
-        <button id="playButton" class="play-btn" aria-pressed="false">▶ پخش آهنگ</button>
-      </div>
-    </div>
+    <audio id="bgAudio" src="Mohsen Chavoshi - Gheire Mamoli 128 (UpMusic).mp3" preload="auto" loop></audio>
+  </div>
 
-    <audio id="bgAudio" src="Mohsen Chavoshi - Gheire Mamoli 128 (UpMusic).mp3" preload="auto" loop></audio>
+  <script>
+    // المان‌ها
+    const audio = document.getElementById('bgAudio');
+    const playBtn = document.getElementById('playBtn');
 
-    <footer>چونکه اولین اهنگتون بود</footer>
-  </div>
+// وضعیت پخش
+    let isPlaying = false;
+    let firstInteractionHandled = false;
 
-  <script>
-    const audio = document.getElementById('bgAudio');
-    const playBtn = document.getElementById('playButton');
+    // تابع تغییر آیکون دکمه
+    function updatePlayButton(){
+      playBtn.textContent = isPlaying ? '⏸' : '▶';
+      playBtn.setAttribute('aria-pressed', String(isPlaying));
+    }
 
-    function tryAutoPlay(){
-      audio.play().then(()=> {
-        playBtn.textContent = '⏸ توقف';
-        playBtn.setAttribute('aria-pressed','true');
-      }).catch(()=> {
-        playBtn.textContent = '▶ پخش آهنگ';
-        playBtn.setAttribute('aria-pressed','false');
-      });
-    }
+    // تلاش برای پخش با اولین تعامل کاربر (یکبار)
+    function handleFirstInteraction(e){
+      if (firstInteractionHandled) return;
+      firstInteractionHandled = true;
 
-playBtn.addEventListener('click', async () => {
-      if (audio.paused){
-        try { await audio.play(); playBtn.textContent = '⏸ توقف'; playBtn.setAttribute('aria-pressed','true'); }
-        catch(e){ console.warn('پخش نشد', e); }
-      } else {
-        audio.pause();
-        playBtn.textContent = '▶ پخش آهنگ';
-        playBtn.setAttribute('aria-pressed','false');
-      }
-    });
+      // تلاش برای پخش؛ مرورگر ممکن است اجازه ندهد مگر تعامل واقعی
+      audio.play().then(()=> {
+        isPlaying = true;
+        updatePlayButton();
+      }).catch(()=> {
+        // اگر پخش نشد، دکمه برای شروع دستی آماده است (کاربر قبلاً تعامل داشت)
+        isPlaying = false;
+        updatePlayButton();
+      });
 
-    ['pointerdown','keydown','touchstart'].forEach(evt=>{
-      window.addEventListener(evt, function once(){
-        tryAutoPlay();
-        window.removeEventListener(evt, once);
-      }, {passive:true});
-    });
+      // حذف لیسنرهای یک‌بار مصرف
+      window.removeEventListener('pointerdown', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+      window.removeEventListener('keydown', handleFirstInteraction);
+    }
 
-    window.addEventListener('load', () => { tryAutoPlay(); initParticles(); });
+    // اضافه کردن لیسنرهای تعامل اولیه (لمس، کلیک، کیبورد)
+    window.addEventListener('pointerdown', handleFirstInteraction, {passive:true});
+    window.addEventListener('touchstart', handleFirstInteraction, {passive:true});
+    window.addEventListener('keydown', handleFirstInteraction, {passive:true});
 
-    function initParticles(){
-      const canvas = document.getElementById('particles');
-      const ctx = canvas.getContext('2d');
-      let w = canvas.width = innerWidth;
-      let h = canvas.height = innerHeight;
-      const particles = [];
-      const count = Math.round((w*h)/90000);
-      for(let i=0;i<count;i++){
-        particles.push({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.6+0.6, vx:(Math.random()-0.5)*0.2, vy:-0.2-Math.random()*0.4, alpha:Math.random()*0.6+0.15 });
-      }
-      function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
-      window.addEventListener('resize', resize);
-      function draw(){
-        ctx.clearRect(0,0,w,h);
-        for(const p of particles){
-          p.x += p.vx; p.y += p.vy;
-          if(p.y < -10){ p.y = h + 10; p.x = Math.random()*w; }
-          if(p.x < -10) p.x = w + 10;
-          if(p.x > w + 10) p.x = -10;
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(255,255,255,'+p.alpha+')';
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-          ctx.fill();
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    }
-  </script>
+    // دکمه پخش/توقف: اگر هنوز پخش نشده، تلاش برای پخش؛ در غیر این صورت toggle
+    playBtn.addEventListener('click', async () => {
+      if (!isPlaying){
+        try {
+          await audio.play();
+          isPlaying = true;
+          updatePlayButton();
+        } catch(e){
+          // اگر پخش نشد، ممکن است مرورگر نیاز به تعامل داشته باشد؛ در این حالت کاری انجام نمی‌دهیم
+          console.warn('پخش امکان‌پذیر نیست', e);
+        }
+      } else {
+        audio.pause();
+        isPlaying = false;
+        updatePlayButton();
+      }
+    });
+
+    // وقتی آهنگ به پایان رسید یا لوپ است، وضعیت را همگام‌سازی کن
+    audio.addEventListener('play', ()=> { isPlaying = true; updatePlayButton(); });
+    audio.addEventListener('pause', ()=> { isPlaying = false; updatePlayButton(); });
+
+    // اطمینان از اینکه تصویر هرگز از ارتفاع صفحه بزرگتر نشود (در صورت تغییر اندازه)
+    function adjustImageSize(){
+      const img = document.getElementById('mainImage');
+      // max-height already در CSS تنظیم شده؛ این تابع برای اطمینان از رفتار در مرورگرهای خاص است
+      img.style.maxHeight = window.innerHeight + 'px';
+    }
+    window.addEventListener('resize', adjustImageSize);
+    window.addEventListener('orientationchange', adjustImageSize);
+    window.addEventListener('load', adjustImageSize);
+  </script>
 </body>
 </html>

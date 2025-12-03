@@ -1,257 +1,115 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>هدیه سالگرد نامزدی</title>
-  <style>
-    :root{
-      --accent: #ff6b6b;
-      --glass: rgba(255,255,255,0.08);
-      --text: #ffffff;
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      background: linear-gradient(180deg,#0f1724 0%, #071021 100%);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-
-    .hero{
-      position:relative;
-      height:100vh;
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:20px;
-    }
-
-    .bg-image{
-      position:absolute;
-      inset:0;
-      background-image: url("Sahel.jpg");
-      background-size:cover;
-      background-position:center;
-      filter: blur(6px) brightness(0.6);
-      transform: scale(1.05);
-      transition: filter .8s ease, transform 8s ease;
-      z-index:0;
-    }
-    .hero:hover .bg-image{
-      filter: blur(2px) brightness(0.8);
-      transform: scale(1.08);
-    }
-
-    .content{
-      position:relative;
-      z-index:3;
-      max-width:900px;
-      width:100%;
-      padding:30px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border-radius:16px;
-      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
-      backdrop-filter: blur(6px) saturate(120%);
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .photo-frame{
-      width:220px;
-      height:220px;
-      margin:0 auto 18px;
-      border-radius:50%;
-      overflow:hidden;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 0 6px rgba(255,255,255,0.03);
-      transform: translateY(-10px);
-      animation: float 6s ease-in-out infinite;
-      border: 3px solid rgba(255,255,255,0.06);
-    }
-    .photo-frame img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      transform: scale(1.05);
-      transition: transform .8s ease;
-    }
-    .photo-frame:hover img{ transform: scale(1.12); }
-
-    @keyframes float{
-      0%{ transform: translateY(-10px); }
-      50%{ transform: translateY(6px); }
-      100%{ transform: translateY(-10px); }
-    }
-
-    h1{
-      margin:6px 0 8px;
-      font-size:28px;
-      letter-spacing:0.6px;
-    }
-    p.lead{
-      margin:0 0 18px;
-      color:rgba(255,255,255,0.85);
-      font-size:16px;
-    }
-
-    .play-btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      background: linear-gradient(90deg,var(--accent), #ff8a8a);
-      color:#111;
-      padding:12px 20px;
-      border-radius:999px;
-      font-weight:700;
-      cursor:pointer;
-      border:none;
-      box-shadow: 0 8px 30px rgba(255,107,107,0.18);
-      transition: transform .18s ease, box-shadow .18s ease;
-      margin-top:6px;
-    }
-    .play-btn:active{ transform: translateY(2px); }
-
-    #particles{
-      position:absolute;
-      inset:0;
-      z-index:1;
-      pointer-events:none;
-    }
-
-    footer{
-      position:fixed;
-      left:0;
-      right:0;
-      bottom:12px;
-      z-index:5;
-      text-align:center;
-      color:rgba(255,255,255,0.75);
-      font-size:14px;
-      user-select:none;
-    }
-
-    @media (max-width:520px){
-      .content{ padding:18px; border-radius:12px; }
-      .photo-frame{ width:160px; height:160px; }
-      h1{ font-size:20px; }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>هدیه سالگرد نامزدی</title>
+  <style>
+    :root{ --accent:#ff6b6b; --text:#ffffff; }
+    html,body{ height:100%; margin:0; font-family:"Segoe UI", Tahoma, Arial, sans-serif; background:linear-gradient(180deg,#0f1724 0%,#071021 100%); color:var(--text); }
+    .hero{ position:relative; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px; }
+    .bg-image{ position:absolute; inset:0; background-image:url("Sahel.jpg"); background-size:cover; background-position:center; filter:blur(8px) brightness(0.45); transform:scale(1.06); transition:filter .8s ease, transform 8s ease; z-index:0; }
+    .hero:hover .bg-image{ filter:blur(4px) brightness(0.6); transform:scale(1.08); }
+    .content{ position:relative; z-index:3; max-width:1000px; width:100%; padding:28px; background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border-radius:16px; box-shadow:0 10px 40px rgba(2,6,23,0.6); backdrop-filter:blur(6px) saturate(120%); border:1px solid rgba(255,255,255,0.04); display:flex; flex-direction:column; align-items:center; gap:18px; }
+    .photo-frame{ width:min(720px,86%); max-height:60vh; border-radius:12px; overflow:visible; box-shadow:0 12px 40px rgba(0,0,0,0.6); background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02)); padding:8px; display:flex; align-items:center; justify-content:center; }
+    .photo-frame img{ width:100%; height:auto; max-height:56vh; object-fit:contain; display:block; border-radius:8px; transition:transform .6s ease, filter .6s ease; filter:saturate(1.05) contrast(1.02); }
+    .photo-frame img:hover{ transform:scale(1.02); }
+    h1{ margin:6px 0 0; font-size:28px; letter-spacing:0.6px; }
+    p.lead{ margin:0; color:rgba(255,255,255,0.9); font-size:16px; }
+    .play-btn{ display:inline-flex; align-items:center; gap:10px; background:linear-gradient(90deg,var(--accent), #ff8a8a); color:#111; padding:12px 20px; border-radius:999px; font-weight:700; cursor:pointer; border:none; box-shadow:0 8px 30px rgba(255,107,107,0.18); transition:transform .18s ease; }
+    .play-btn:active{ transform:translateY(2px); }
+    #particles{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+    footer{ position:fixed; left:0; right:0; bottom:12px; z-index:5; text-align:center; color:rgba(255,255,255,0.85); font-size:14px; user-select:none; }
+    @media (max-width:900px){ .photo-frame{ width:92%; max-height:50vh; } .photo-frame img{ max-height:46vh; } }
+    @media (max-width:520px){ .content{ padding:18px; border-radius:12px; } h1{ font-size:20px; } }
+  </style>
 </head>
 <body>
-  <div class="hero">
-    <div class="bg-image" aria-hidden="true"></div>
+  <div class="hero">
+    <div class="bg-image" aria-hidden="true"></div>
+    <canvas id="particles"></canvas>
 
-    <canvas id="particles"></canvas>
+    <div class="content" role="main" aria-label="هدیه سالگرد نامزدی">
+      <div class="photo-frame" aria-hidden="false">
+        <img src="Sahel.jpg" alt="عکس نامزدی دو نفره" />
+      </div>
 
-    <div class="content" role="main" aria-label="هدیه سالگرد نامزدی">
-      <div class="photo-frame" aria-hidden="false">
-        <img src="Sahel.jpg" alt="عکس نامزدی دو نفره" />
-      </div>
 
-      <h1>سالگرد نامزدی مبارک</h1>
-      <p class="lead">یک هدیه کوچک از طرفِ یکی که همیشه کنارت خواهد بود</p>
+   
+      <p class="lead">از طرفِ یکی که همیشه کنارتونه  </p>
 
-      <div id="controls">
-        <button id="playButton" class="play-btn" aria-pressed="false">
-          ▶ پخش آهنگ
-        </button>
-      </div>
-    </div>
+      <div id="controls">
+        <button id="playButton" class="play-btn" aria-pressed="false">▶ پخش آهنگ</button>
+      </div>
+    </div>
 
-<audio id="bgAudio" src="Mohsen Chavoshi - Gheire Mamoli 128 (UpMusic).mp3" preload="auto" loop></audio>
+    <audio id="bgAudio" src="Mohsen Chavoshi - Gheire Mamoli 128 (UpMusic).mp3" preload="auto" loop></audio>
 
-    <footer>(چون اولین اهنگتون بود)</footer>
-  </div>
+    <footer>چونکه اولین اهنگتون بود</footer>
+  </div>
 
-  <script>
-    const audio = document.getElementById('bgAudio');
-    const playBtn = document.getElementById('playButton');
+  <script>
+    const audio = document.getElementById('bgAudio');
+    const playBtn = document.getElementById('playButton');
 
-    function tryAutoPlay(){
-      audio.play().then(()=> {
-        playBtn.textContent = '⏸ توقف';
-        playBtn.setAttribute('aria-pressed','true');
-      }).catch(()=> {
-        playBtn.textContent = '▶ پخش آهنگ';
-        playBtn.setAttribute('aria-pressed','false');
-      });
-    }
+    function tryAutoPlay(){
+      audio.play().then(()=> {
+        playBtn.textContent = '⏸ توقف';
+        playBtn.setAttribute('aria-pressed','true');
+      }).catch(()=> {
+        playBtn.textContent = '▶ پخش آهنگ';
+        playBtn.setAttribute('aria-pressed','false');
+      });
+    }
 
-    playBtn.addEventListener('click', async () => {
-      if (audio.paused){
-        try {
-          await audio.play();
-          playBtn.textContent = '⏸ توقف';
-          playBtn.setAttribute('aria-pressed','true');
-        } catch(e){
-          console.warn('پخش نشد', e);
-        }
-      } else {
-        audio.pause();
-        playBtn.textContent = '▶ پخش آهنگ';
-        playBtn.setAttribute('aria-pressed','false');
-      }
-    });
+playBtn.addEventListener('click', async () => {
+      if (audio.paused){
+        try { await audio.play(); playBtn.textContent = '⏸ توقف'; playBtn.setAttribute('aria-pressed','true'); }
+        catch(e){ console.warn('پخش نشد', e); }
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶ پخش آهنگ';
+        playBtn.setAttribute('aria-pressed','false');
+      }
+    });
 
-    ['pointerdown','keydown','touchstart'].forEach(evt=>{
-      window.addEventListener(evt, function once(){
-        tryAutoPlay();
-        window.removeEventListener(evt, once);
-      }, {passive:true});
-    });
+    ['pointerdown','keydown','touchstart'].forEach(evt=>{
+      window.addEventListener(evt, function once(){
+        tryAutoPlay();
+        window.removeEventListener(evt, once);
+      }, {passive:true});
+    });
 
-    window.addEventListener('load', () => {
-      tryAutoPlay();
-      initParticles();
-    });
+    window.addEventListener('load', () => { tryAutoPlay(); initParticles(); });
 
-    function initParticles(){
-      const canvas = document.getElementById('particles');
-      const ctx = canvas.getContext('2d');
-      let w = canvas.width = innerWidth;
-      let h = canvas.height = innerHeight;
-      const particles = [];
-      const count = Math.round((w*h)/90000);
-
-      for(let i=0;i<count;i++){
-        particles.push({
-          x: Math.random()*w,
-          y: Math.random()*h,
-          r: Math.random()*1.6 + 0.6,
-          vx: (Math.random()-0.5)*0.2,
-          vy: -0.2 - Math.random()*0.4,
-          alpha: Math.random()*0.6 + 0.15
-        });
-      }
-
-      function resize(){
-        w = canvas.width = innerWidth;
-        h = canvas.height = innerHeight;
-      }
-      window.addEventListener('resize', resize);
-
-      function draw(){
-        ctx.clearRect(0,0,w,h);
-        for(const p of particles){
-          p.x += p.vx;
-          p.y += p.vy;
-          if(p.y < -10) { p.y = h + 10; p.x = Math.random()*w; }
-          if(p.x < -10) p.x = w + 10;
-          if(p.x > w + 10) p.x = -10;
-
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(255,255,255,'+p.alpha+')';
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-          ctx.fill();
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    }
-  </script>
+    function initParticles(){
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = innerWidth;
+      let h = canvas.height = innerHeight;
+      const particles = [];
+      const count = Math.round((w*h)/90000);
+      for(let i=0;i<count;i++){
+        particles.push({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.6+0.6, vx:(Math.random()-0.5)*0.2, vy:-0.2-Math.random()*0.4, alpha:Math.random()*0.6+0.15 });
+      }
+      function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+      window.addEventListener('resize', resize);
+      function draw(){
+        ctx.clearRect(0,0,w,h);
+        for(const p of particles){
+          p.x += p.vx; p.y += p.vy;
+          if(p.y < -10){ p.y = h + 10; p.x = Math.random()*w; }
+          if(p.x < -10) p.x = w + 10;
+          if(p.x > w + 10) p.x = -10;
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(255,255,255,'+p.alpha+')';
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+  </script>
 </body>
 </html>

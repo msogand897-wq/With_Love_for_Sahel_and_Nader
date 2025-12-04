@@ -7,10 +7,20 @@
   <style>
     :root{
       --bg:#0b1327;
+      --panel:#101a36;
       --accent:#ff6b6b;
       --text:#ffffff;
+      --muted:rgba(255,255,255,0.75);
     }
-    html,body{ height:100%; margin:0; background:var(--bg); font-family:"Segoe UI", Tahoma, Arial, sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--bg);
+      font-family:"Segoe UI", Tahoma, Arial, sans-serif;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
 
     /* پس‌زمینه بلوری از خود عکس */
     .page-bg{
@@ -22,14 +32,6 @@
       filter:blur(18px) brightness(0.45);
       transform:scale(1.06);
       z-index:0;
-    }
-
-    /* کانواس ذرات نور آرام (روی پس‌زمینه بلر) */
-    #bgLights{
-      position:fixed;
-      inset:0;
-      z-index:1;
-      pointer-events:none;
     }
 
     .outer-frame{
@@ -46,93 +48,128 @@
     .card{
       width:min(700px, 94vw);
       border-radius:18px;
-      background:linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      background:linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow: 0 20px 60px rgba(0,0,0,0.55);
       backdrop-filter: blur(10px) saturate(120%);
-      border:1px solid rgba(255,255,255,0.08);
-      overflow:visible;
+      border:1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
       display:flex;
       flex-direction:column;
-      align-items:center;
     }
 
-    /* قاب داخلی تصویر (قاب در قاب) */
+    /* قاب داخلی تصویر (حاوی canvas ذرات و عکس داخل قاب بیضی) */
     .inner-frame{
       position:relative;
-      width:100%;
-      padding:12px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.20), rgba(255,255,255,0.03));
+      padding:18px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0.02));
-      border-radius:14px;
-      overflow:visible; /* اجازه می‌دهد تصویر بدون برش نمایش داده شود */
+      min-height:280px;
+      box-sizing:border-box;
     }
 
-    /* تصویر اصلی: بدون برش، حرکت خیلی آرام برای حس معلق بودن */
-    .inner-frame img{
-      width:100%;
-      height:auto;
-      max-height:66vh;
-      object-fit:contain;
-      border-radius:10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.55);
-      -webkit-user-drag:none;
-      user-select:none;
-      display:block;
-      transform-origin:center;
-      animation: floatVerySlow 18s ease-in-out infinite;
-      will-change: transform;
-    }
-
-    @keyframes floatVerySlow{
-      0%   { transform: translateY(-6px) scale(1.0002); }
-      50%  { transform: translateY(6px)  scale(1.0006); }
-      100% { transform: translateY(-6px) scale(1.0002); }
-    }
-
-    /* ماسک بیضی نرم و glow خیلی کم دور عکس (قاب در قاب) */
-    .inner-frame::after{
-      content:"";
+    /* کانواس ذرات: بین پس‌زمینه و تصویر */
+    #particleCanvas{
       position:absolute;
-      left:8px;
-      right:8px;
-      top:8px;
-      bottom:8px;
-      border-radius:50% / 40%;
+      inset:18px; /* همون padding داخل inner-frame */
+      width:calc(100% - 36px);
+      height:calc(100% - 36px);
       pointer-events:none;
-      /* خیلی کم glow: استفاده از سایه و blend برای ظاهری نرم */
-      box-shadow: 0 8px 40px rgba(255,255,255,0.03), inset 0 0 18px rgba(255,255,255,0.02);
-      mix-blend-mode: screen;
-      opacity:0.95;
+      z-index:1;
+      border-radius:16px;
+      opacity:0.85;
+      mix-blend-mode:screen; /* نور نرم‌تر و زیباتر */
     }
 
+    /* قاب بیضی دور عکس (photo-oval) */
+    .photo-oval{
+      position:relative;
+      z-index:2; /* جلوتر از ذرات */
+      width:100%;
+      max-width:660px;
+      /* نسبت دلخواه: این کمک می‌کنه عکس ابعاد خوبی داشته باشه */
+      aspect-ratio: 3 / 2;
+      display:block;
+      overflow:hidden;
+      border-radius:30px; /* خود قاب لبه‌دار */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px; /* فاصله قاب تا عکس برای خط بیضی */
+      box-sizing:border-box;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+      /* سایه ملایم */
+      box-shadow: 0 14px 40px rgba(2,6,23,0.55), inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    /* خط بیضی ظریف — pseudo element */
+    .photo-oval::before{
+      content: "";
+      position: absolute;
+      inset:6px; /* فاصله از لبهٔ wrapper */
+      border-radius: 26px / 20px; /* کمی بیضی */
+      pointer-events: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+      border: 1.25px solid rgba(255,255,255,0.06);
+      /* برای لبه نرم‌تر، از گرادیان و ماسک استفاده می‌کنیم */
+      background: radial-gradient(120% 80% at 50% 40%, rgba(255,255,255,0.015), rgba(255,255,255,0.006) 25%, transparent 60%), transparent;
+      mix-blend-mode: overlay;
+      z-index:3;
+    }
+
+    /* ماسک نرم‌کننده لبهٔ تصویر؛ این باعث می‌شود گوشه‌ها خیلی نرم باشند */
+    .photo-oval img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:16px; /* داخل قاب هم گرد */
+      filter: saturate(1.02);
+      transform-origin:center;
+      position:relative;
+
+z-index:4;
+      /* انیمیشن شناور (خیلی نرم) */
+      animation: floatY 6.5s cubic-bezier(.445,.05,.55,.95) infinite;
+      transition: transform 400ms ease;
+      /* ماسک نرم (برای مرورگرهایی که پشتیبانی می‌کنند) */
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 72%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,0.6) 92%, rgba(0,0,0,0.0) 100%);
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 72%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,0.6) 92%, rgba(0,0,0,0.0) 100%);
+    }
+
+    @keyframes floatY{
+      0%{ transform: translateY(0px) scale(1); }
+      25%{ transform: translateY(-6px) scale(1.001); }
+      50%{ transform: translateY(0px) scale(1); }
+      75%{ transform: translateY(6px) scale(0.999); }
+      100%{ transform: translateY(0px) scale(1); }
+    }
+
+    /* متن روی عکس */
     .message{
-      padding:10px 14px 0 14px;
+      padding:8px 14px 0 14px;
       text-align:center;
       font-weight:700;
       font-size:18px;
       color:var(--text);
     }
 
+    /* کنترل‌ها: دکمه پخش، ویژوالایزر، نوار زمان */
     .controls{
-      width:100%;
       display:flex;
       flex-direction:column;
       gap:10px;
       padding:14px;
       background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0.02));
-      border-top:1px solid rgba(255,255,255,0.08);
-      box-sizing:border-box;
+      border-top:1px solid rgba(255,255,255,0.10);
     }
-
     .row{
       display:flex;
       align-items:center;
       gap:12px;
       justify-content:center;
     }
-
     .btn{
       width:56px;
       height:56px;
@@ -150,47 +187,61 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-.small-btn{
-      width:44px;
-      height:44px;
-      font-size:16px;
-      border-radius:12px;
-      background:rgba(255,255,255,0.06);
-      color:var(--text);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border:1px solid rgba(255,255,255,0.04);
-    }
-
     .viz-wrap{
       position:relative;
       width:140px;
       height:40px;
       border-radius:10px;
       overflow:hidden;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.10);
     }
-    #visualizer{ width:100%; height:100%; display:block; }
+    #visualizer{
+      width:100%;
+      height:100%;
+      display:block;
+    }
 
     .seek{
       display:flex;
       align-items:center;
       gap:10px;
-      width:100%;
     }
-    .time{ font-size:12px; color:rgba(255,255,255,0.78); min-width:48px; text-align:center; }
-    input[type="range"]{ -webkit-appearance:none; appearance:none; width:100%; height:8px; background:rgba(255,255,255,0.12); border-radius:999px; outline:none; }
-    input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(255,107,107,0.18); border:none; }
-    input[type="range"]::-moz-range-thumb{ width:18px; height:18px; border-radius:50%; background:var(--accent); border:none; }
+    .time{
+      font-size:12px;
+      color:var(--muted);
+      min-width:48px;
+      text-align:center;
+    }
+    input[type="range"]{
+      -webkit-appearance:none;
+      appearance:none;
+      width:100%;
+      height:8px;
+      background:rgba(255,255,255,0.18);
+      border-radius:999px;
+      outline:none;}
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      appearance:none;
+      width:18px; height:18px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 4px rgba(255,107,107,0.25);
+      border:none;
+    }
+    input[type="range"]::-moz-range-thumb{
+      width:18px; height:18px; border-radius:50%; background:var(--accent); border:none;
+    }
 
+    /* فوتر برجسته: خواستی بزرگتر، پررنگتر و کمی بالا */
     footer{
       padding:8px 14px 16px;
       text-align:center;
-      font-size:18px;
-      font-weight:700;
-      color:rgba(255,255,255,0.95);
+      font-size:20px; /* بزرگتر */
+      font-weight:800; /* پررنگ‌تر */
+      color:rgba(255,255,255,0.98);
+      transform: translateY(-6px); /* کمی بالاتر */
     }
 
     @media (max-width:380px){
@@ -198,29 +249,32 @@
       .viz-wrap{ width:120px; height:36px; }
       .message{ font-size:16px; }
       .inner-frame img{ max-height:62vh; }
+      .photo-oval{ aspect-ratio: 4 / 3; }
     }
+
   </style>
 </head>
 <body>
   <div class="page-bg" aria-hidden="true"></div>
-  <canvas id="bgLights"></canvas>
-
   <div class="outer-frame">
     <div class="card">
       <div class="inner-frame">
-        <img src="Sahel.jpg" alt="عکس نامزدی دو نفره" id="mainImage" />
+        <!-- ذرات پس‌زمینه (canvas) -->
+        <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+        <!-- قاب بیضی حاوی عکس -->
+        <div class="photo-oval" aria-hidden="false">
+          <img src="Sahel.jpg" alt="عکس نامزدی دو نفره" />
+        </div>
       </div>
 
       <div class="message">از طرف کسی که همیشه کنارتونه</div>
 
-      <div class="controls">
+<div class="controls">
         <div class="row">
-          <button id="back15" class="small-btn" title="-15 ثانیه">« 15s</button>
           <button id="playBtn" class="btn" aria-label="پخش/توقف">▶</button>
-          <button id="forward15" class="small-btn" title="+15 ثانیه">15s »</button>
-
-          <div class="viz-wrap" aria-hidden="true">
-            <canvas id="visualizer"></canvas>
+          <div class="viz-wrap">
+            <canvas id="visualizer" aria-hidden="true"></canvas>
           </div>
         </div>
 
@@ -235,21 +289,20 @@
     </div>
   </div>
 
+  <!-- موسیقی -->
   <audio id="bgAudio" src="Mohsen Chavoshi - Gheire Mamoli 128 (UpMusic).mp3" preload="auto" loop></audio>
 
   <script>
-    /* ---------- عناصر و وضعیت ---------- */
+    /* ========== Audio + Visualizer (همون کد اصلی با کمی سازگارسازی canvas) ========== */
     const audio = document.getElementById('bgAudio');
     const playBtn = document.getElementById('playBtn');
-    const back15 = document.getElementById('back15');
-    const forward15 = document.getElementById('forward15');
     const seekBar = document.getElementById('seekBar');
     const curEl = document.getElementById('currentTime');
     const durEl = document.getElementById('durationTime');
+    const vizCanvas = document.getElementById('visualizer');
+    const vizCtx = vizCanvas.getContext('2d');
 
-    /* ---------- Web Audio و ویژوالایزر ---------- */
-    const visCanvas = document.getElementById('visualizer');
-    const visCtx = visCanvas.getContext('2d');
+    let isPlaying = false;
     let audioCtx, sourceNode, analyser, dataArray, bufferLength;
 
     function initAudioGraph(){
@@ -264,22 +317,25 @@
       analyser.connect(audioCtx.destination);
     }
 
-function resizeVis(){
-      visCanvas.width = visCanvas.clientWidth * devicePixelRatio;
-      visCanvas.height = visCanvas.clientHeight * devicePixelRatio;
-      visCtx.scale(devicePixelRatio, devicePixelRatio);
+    function resizeViz(){
+      vizCanvas.width = vizCanvas.clientWidth * devicePixelRatio;
+      vizCanvas.height = vizCanvas.clientHeight * devicePixelRatio;
+      vizCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
     }
-    window.addEventListener('resize', resizeVis);
-    resizeVis();
+    window.addEventListener('resize', resizeViz, {passive:true});
+    resizeViz();
 
-    function drawVis(){
-      if (!analyser) return;
+    function drawBars(){
+      if (!analyser) {
+        requestAnimationFrame(drawBars);
+        return;
+      }
       analyser.getByteFrequencyData(dataArray);
-      const w = visCanvas.clientWidth;
-      const h = visCanvas.clientHeight;
-      visCtx.clearRect(0,0,w,h);
+      const w = vizCanvas.clientWidth;
+      const h = vizCanvas.clientHeight;
+      vizCtx.clearRect(0,0,w,h);
 
-      const barCount = 20;
+      const barCount = 24;
       const step = Math.floor(bufferLength / barCount);
       const barWidth = Math.max(3, Math.floor(w / (barCount*1.4)));
       const gap = Math.max(2, Math.floor((w - barWidth*barCount) / (barCount-1)));
@@ -287,42 +343,52 @@ function resizeVis(){
       for (let i=0;i<barCount;i++){
         const v = dataArray[i*step] / 255;
         const barHeight = Math.max(2, Math.floor(v * h));
-        const grad = visCtx.createLinearGradient(0, h-barHeight, 0, h);
+        const grad = vizCtx.createLinearGradient(0, h-barHeight, 0, h);
         grad.addColorStop(0, '#ff8a8a');
         grad.addColorStop(1, '#ff6b6b');
-        visCtx.fillStyle = grad;
-        visCtx.fillRect(x, h - barHeight, barWidth, barHeight);
+        vizCtx.fillStyle = grad;
+        vizCtx.fillRect(x, h - barHeight, barWidth, barHeight);
         x += barWidth + gap;
       }
-      requestAnimationFrame(drawVis);
+      requestAnimationFrame(drawBars);
     }
 
-    /* ---------- کنترل پخش و seek ---------- */
-    let isPlaying = false;
-    function updatePlayBtn(){ playBtn.textContent = isPlaying ? '⏸' : '▶'; playBtn.setAttribute('aria-pressed', String(isPlaying)); }
+    function updatePlayBtn(){
+      playBtn.textContent = isPlaying ? '⏸' : '▶';
+      playBtn.setAttribute('aria-pressed', String(isPlaying));
+    }
 
     playBtn.addEventListener('click', async () => {
       try {
         initAudioGraph();
         if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
-        if (!isPlaying){ await audio.play(); isPlaying = true; } else { audio.pause(); isPlaying = false; }
+        if (!isPlaying){
+          await audio.play();
+          isPlaying = true;
+        } else {
+          audio.pause();
+          isPlaying = false;
+        }
         updatePlayBtn();
-        drawVis();
-      } catch(e){ console.warn('پخش امکان‌پذیر نیست', e); }
+      } catch(e){
+        console.warn('خطای پخش:', e);
+      }
     });
 
-    // جلو/عقب 15 ثانیه
-    back15.addEventListener('click', ()=> { audio.currentTime = Math.max(0, audio.currentTime - 15); });
-    forward15.addEventListener('click', ()=> { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 15); });
-
-    // اولین تعامل برای فعال‌سازی پخش و WebAudio
     let firstInteractionHandled = false;
     function handleFirstInteraction(){
       if (firstInteractionHandled) return;
-      firstInteractionHandled = true;
+
+firstInteractionHandled = true;
       initAudioGraph();
       if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-      audio.play().then(()=>{ isPlaying = true; updatePlayBtn(); drawVis(); }).catch(()=>{ drawVis(); });
+      audio.play().then(()=>{
+        isPlaying = true;
+        updatePlayBtn();
+        drawBars();
+      }).catch(()=>{
+        drawBars();
+      });
       window.removeEventListener('pointerdown', handleFirstInteraction);
       window.removeEventListener('touchstart', handleFirstInteraction);
       window.removeEventListener('keydown', handleFirstInteraction);
@@ -335,16 +401,19 @@ function resizeVis(){
     audio.addEventListener('pause', ()=>{ isPlaying = false; updatePlayBtn(); });
 
     function fmt(s){
-      s = Math.floor(s || 0);
+      s = Math.floor(s);
       const m = Math.floor(s/60), sec = s%60;
       return (m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;
     }
-    audio.addEventListener('loadedmetadata', ()=>{ durEl.textContent = fmt(audio.duration || 0); });
+    audio.addEventListener('loadedmetadata', ()=>{
+      durEl.textContent = fmt(audio.duration || 0);
+    });
     audio.addEventListener('timeupdate', ()=>{
       curEl.textContent = fmt(audio.currentTime || 0);
-      if (audio.duration) seekBar.value = Math.floor((audio.currentTime / audio.duration) * seekBar.max);
+      if (audio.duration){
+        seekBar.value = Math.floor((audio.currentTime / audio.duration) * seekBar.max);
+      }
     });
-
     let seeking = false;
     seekBar.addEventListener('input', ()=>{
       seeking = true;
@@ -356,75 +425,113 @@ function resizeVis(){
     });
     seekBar.addEventListener('change', ()=>{ seeking = false; });
 
-/* ---------- ذرات نور آرام در بکگراند بلر ---------- */
-    const lightsCanvas = document.getElementById('bgLights');
-    const lctx = lightsCanvas.getContext('2d');
-    let lw, lh;
-    function resizeLights(){
-      lw = lightsCanvas.width = innerWidth * devicePixelRatio;
-      lh = lightsCanvas.height = innerHeight * devicePixelRatio;
-      lightsCanvas.style.width = innerWidth + 'px';
-      lightsCanvas.style.height = innerHeight + 'px';
-      lctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    }
-    window.addEventListener('resize', resizeLights);
-    resizeLights();
-
-    // چند نقطه نور کم‌رنگ و آرام
-    const lights = [];
-    const LIGHT_COUNT = 6;
-    for (let i=0;i<LIGHT_COUNT;i++){
-      lights.push({
-        x: Math.random() * innerWidth,
-        y: Math.random() * innerHeight,
-        r: 20 + Math.random()*60,
-        vx: (Math.random()-0.5) * 0.02, // خیلی آرام
-        vy: (Math.random()-0.5) * 0.02,
-        hue: 30 + Math.random()*40,
-        alpha: 0.06 + Math.random()*0.06
-      });
-    }
-
-    let lastTime = performance.now();
-    function drawLights(now){
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-      lctx.clearRect(0,0,innerWidth,innerHeight);
-      for (const p of lights){
-        p.x += p.vx * (dt*60);
-        p.y += p.vy * (dt*60);
-        // حلقه آرام
-        if (p.x < -100) p.x = innerWidth + 100;
-        if (p.x > innerWidth + 100) p.x = -100;
-        if (p.y < -100) p.y = innerHeight + 100;
-        if (p.y > innerHeight + 100) p.y = -100;
-
-        const g = lctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        g.addColorStop(0, hsla(${p.hue}, 80%, 70%, ${p.alpha}));
-        g.addColorStop(0.4, hsla(${p.hue}, 80%, 60%, ${p.alpha*0.6}));
-        g.addColorStop(1, hsla(${p.hue}, 80%, 50%, 0));
-        lctx.fillStyle = g;
-        lctx.fillRect(p.x - p.r, p.y - p.r, p.r*2, p.r*2);
-      }
-      requestAnimationFrame(drawLights);
-    }
-    requestAnimationFrame(drawLights);
-
-    /* ---------- ایمن‌سازی عملکرد هنگام مخفی شدن صفحه ---------- */
-    document.addEventListener('visibilitychange', ()=>{
-      if (document.hidden){
-        // کاهش مصرف: توقف رسم ویژوالایزر
-      } else {
-        // بازگشت به حالت قبل
-      }
+    window.addEventListener('load', ()=>{
+      resizeViz();
+      drawBars();
     });
 
-    /* ---------- اطمینان از اندازه canvas ویژوالایزر و شروع رسم ---------- */
-    function startVisual(){
-      resizeVis();
-      drawVis();
-    }
-    window.addEventListener('load', startVisual);
+    /* ========== Particles (ذرات آرام پشت عکس) ========== */
+    (function(){
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      let w = 0, h = 0, DPR = Math.max(1, devicePixelRatio || 1);
+      function resize(){
+        const rect = canvas.getBoundingClientRect();
+        w = Math.max(1, Math.floor(rect.width));
+        h = Math.max(1, Math.floor(rect.height));
+        canvas.width = w * DPR;
+        canvas.height = h * DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+      }
+      window.addEventListener('resize', resize, {passive:true});
+      resize();
+
+      // تنظیمات ذرات: خیلی کم، خیلی آرام
+      const PARTICLE_COUNT = Math.max(6, Math.round(Math.min(12, (w*h)/(120000)))); // اندازه‌گیر خودکار ولی کم
+      const particles = [];
+
+      function rand(min, max){ return Math.random() * (max - min) + min; }
+
+      for (let i=0;i<PARTICLE_COUNT;i++){
+        particles.push({
+          x: rand(0, w),
+          y: rand(0, h),
+          r: rand(1.6, 4.4), // اندازه نقطه
+          alpha: rand(0.08, 0.28),
+          vx: rand(-0.02, 0.02), // خیلی کم سرعت افقی
+          vy: rand(-0.03, 0.03), // خیلی کم سرعت عمودی
+          phase: rand(0,Math.PI*2), // برای نوسان آهسته
+          tw: rand(6, 18) // دوره نوسان
+        });
+      }
+
+      let lastTime = performance.now();
+      function step(now){
+        const dt = Math.min(40, now - lastTime);
+        lastTime = now;
+        // روی هر frame حرکت بسیار آرام انجام می‌دهیم
+        ctx.clearRect(0,0,w,h);
+
+        // بک‌گراند نورمل (کم کانترست)
+        // ctx.fillStyle = 'rgba(255,255,255,0.0)';
+        // ctx.fillRect(0,0,w,h);
+
+        for (let p of particles){
+          // حرکت آرام و کمی نوسان
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.phase += dt * 0.001;
+          // نوسان کوچک در شفافیت و اندازه برای حس زنده بودن
+          const pulse = 0.6 + 0.4 * Math.sin(p.phase * (Math.PI / p.tw));
+          const alpha = Math.max(0.02, Math.min(0.32, p.alpha * pulse));
+          const rr = p.r * (0.85 + 0.25 * Math.sin(p.phase*0.8));
+
+// بازگشت ذره از لبه‌ها به آرامی
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+          if (p.y < -10) p.y = h + 10;
+          if (p.y > h + 10) p.y = -10;
+
+          // رسم با گرادیانت نرم و بلور بصری (shadow)
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rr*3.8);
+          g.addColorStop(0, rgba(255,255,255,${alpha}));
+          g.addColorStop(0.4, rgba(255,240,220,${alpha*0.35}));
+          g.addColorStop(1, rgba(255,240,220,0));
+          ctx.beginPath();
+          ctx.fillStyle = g;
+          ctx.arc(p.x, p.y, rr*2, 0, Math.PI*2);
+          ctx.fill();
+
+          // خیلی کم هاله بیرونی
+          ctx.beginPath();
+          ctx.fillStyle = rgba(255,255,255,${alpha*0.07});
+          ctx.arc(p.x, p.y, rr*5, 0, Math.PI*2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      // resize و دوباره تنظیم ذرات روی تغییر سایز صفحه
+      function resetParticlesOnResize(){
+        // موقع تغییر اندازه، بازتوزیع موقعیت‌ها به شکلی طبیعی
+        const rect = canvas.getBoundingClientRect();
+        const newW = rect.width, newH = rect.height;
+        for (let p of particles){
+          p.x = Math.min(newW, (p.x / Math.max(1,w)) * newW);
+          p.y = Math.min(newH, (p.y / Math.max(1,h)) * newH);
+        }
+        resize();
+      }
+      window.addEventListener('resize', resetParticlesOnResize, {passive:true});
+
+      requestAnimationFrame(step);
+    })();
+
+    /* ========== نکته‌های سازگاری: اگر بخوای می‌تونم تنظیمات بیشتری بدم ==========
+       - سرعت و تعداد ذرات پایین گذاشته شده تا مینیمال بمونه.
+       - اگر می‌خوای ذرات حتی کمرنگ‌تر یا کندتر باشن، بگو; عددها رو کم می‌کنم.
+       - انیمیشن شناور عکس بسیار ملایمه؛ اگر خواستی دامنه یا دوره‌اش رو تغییر بدم. */
   </script>
 </body>
 </html>
